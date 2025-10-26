@@ -13,6 +13,8 @@ interface Product {
   category: string;
   image: string;
   badge?: string;
+  rating?: number;
+  reviews?: number;
 }
 
 interface CartItem extends Product {
@@ -20,121 +22,97 @@ interface CartItem extends Product {
 }
 
 const Index = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('Все товары');
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const categories = [
-    'Все товары',
-    'Мебель',
-    'Текстиль',
-    'Посуда',
-    'Декор',
-    'Освещение',
-    'Хранение',
-    'Кухня'
-  ];
 
   const products: Product[] = [
     {
       id: 1,
-      name: 'Диван угловой "Комфорт"',
-      price: 45990,
-      oldPrice: 52990,
-      category: 'Мебель',
-      image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&h=500&fit=crop',
-      badge: 'Скидка'
+      name: 'Набор антипригарных сковород "Гранит Делюкс" 3 предмета',
+      price: 2990,
+      oldPrice: 5990,
+      category: 'Кухня',
+      image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=600&fit=crop',
+      badge: 'ХИТ',
+      rating: 4.8,
+      reviews: 342
     },
     {
       id: 2,
-      name: 'Комплект постельного белья',
-      price: 3490,
-      category: 'Текстиль',
-      image: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=500&h=500&fit=crop',
-      badge: 'Новинка'
+      name: 'Многофункциональная овощерезка 12 в 1',
+      price: 1490,
+      oldPrice: 2990,
+      category: 'Кухня',
+      image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=600&fit=crop',
+      badge: 'СКИДКА -50%',
+      rating: 4.9,
+      reviews: 521
     },
     {
       id: 3,
-      name: 'Набор тарелок керамических',
-      price: 2990,
-      category: 'Посуда',
-      image: 'https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=500&h=500&fit=crop'
+      name: 'Ортопедическая подушка с эффектом памяти',
+      price: 1990,
+      oldPrice: 3990,
+      category: 'Для дома',
+      image: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=600&fit=crop',
+      badge: 'НОВИНКА',
+      rating: 4.7,
+      reviews: 189
     },
     {
       id: 4,
-      name: 'Ваза декоративная',
-      price: 1590,
-      category: 'Декор',
-      image: 'https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=500&h=500&fit=crop'
+      name: 'Беспроводной пылесос "Циклон Про" 2 в 1',
+      price: 4990,
+      oldPrice: 9990,
+      category: 'Техника',
+      image: 'https://images.unsplash.com/photo-1558317374-067fb5f30001?w=600&h=600&fit=crop',
+      badge: 'ТОП',
+      rating: 4.6,
+      reviews: 267
     },
     {
       id: 5,
-      name: 'Люстра подвесная',
-      price: 8990,
-      oldPrice: 11990,
-      category: 'Освещение',
-      image: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=500&h=500&fit=crop',
-      badge: 'Скидка'
+      name: 'Массажная подушка для шеи и спины',
+      price: 2490,
+      oldPrice: 4990,
+      category: 'Здоровье',
+      image: 'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=600&h=600&fit=crop',
+      badge: 'АКЦИЯ',
+      rating: 4.8,
+      reviews: 412
     },
     {
       id: 6,
-      name: 'Корзина для хранения',
-      price: 890,
-      category: 'Хранение',
-      image: 'https://images.unsplash.com/photo-1610992015732-2449b76344bc?w=500&h=500&fit=crop'
+      name: 'Умные весы с анализатором состава тела',
+      price: 1990,
+      category: 'Здоровье',
+      image: 'https://images.unsplash.com/photo-1576671081837-49000212a370?w=600&h=600&fit=crop',
+      rating: 4.5,
+      reviews: 156
     },
     {
       id: 7,
-      name: 'Кофеварка капельная',
-      price: 4990,
-      category: 'Кухня',
-      image: 'https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=500&h=500&fit=crop',
-      badge: 'Хит'
+      name: 'Электрическая сушилка для обуви',
+      price: 890,
+      oldPrice: 1790,
+      category: 'Для дома',
+      image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=600&fit=crop',
+      badge: 'SALE',
+      rating: 4.4,
+      reviews: 98
     },
     {
       id: 8,
-      name: 'Стол обеденный',
-      price: 19990,
-      category: 'Мебель',
-      image: 'https://images.unsplash.com/photo-1517705008128-361805f42e86?w=500&h=500&fit=crop'
-    },
-    {
-      id: 9,
-      name: 'Плед вязаный',
-      price: 2490,
-      category: 'Текстиль',
-      image: 'https://images.unsplash.com/photo-1631049035182-249067d7618e?w=500&h=500&fit=crop',
-      badge: 'Новинка'
-    },
-    {
-      id: 10,
-      name: 'Сковорода чугунная',
-      price: 3290,
-      category: 'Кухня',
-      image: 'https://images.unsplash.com/photo-1565374472083-c0ce2ec1d07e?w=500&h=500&fit=crop'
-    },
-    {
-      id: 11,
-      name: 'Зеркало настенное',
-      price: 5990,
-      category: 'Декор',
-      image: 'https://images.unsplash.com/photo-1618220179428-22790b461013?w=500&h=500&fit=crop'
-    },
-    {
-      id: 12,
-      name: 'Настольная лампа',
-      price: 2990,
-      category: 'Освещение',
-      image: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=500&h=500&fit=crop'
+      name: 'Портативная Bluetooth колонка водонепроницаемая',
+      price: 1290,
+      oldPrice: 2590,
+      category: 'Техника',
+      image: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=600&h=600&fit=crop',
+      badge: 'ХИТ',
+      rating: 4.7,
+      reviews: 234
     }
   ];
-
-  const filteredProducts = products.filter(product => {
-    const matchesCategory = selectedCategory === 'Все товары' || product.category === selectedCategory;
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
 
   const addToCart = (product: Product) => {
     const existingItem = cart.find(item => item.id === product.id);
@@ -175,313 +153,343 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center gap-8">
-            <a href="/" className="flex items-center gap-2">
-              <Icon name="Home" className="h-6 w-6 text-primary" />
-              <span className="text-xl font-bold">МойМир</span>
+    <div className="min-h-screen bg-gray-50">
+      <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white py-2">
+        <div className="container flex justify-between items-center text-sm">
+          <div className="flex items-center gap-6">
+            <a href="tel:88001234567" className="flex items-center gap-2 hover:opacity-80">
+              <Icon name="Phone" className="h-4 w-4" />
+              <span className="font-semibold">8 800 123-45-67</span>
+              <span className="opacity-90">Звонок бесплатный</span>
             </a>
-            <nav className="hidden md:flex gap-6">
-              <a href="#catalog" className="text-sm font-medium hover:text-primary transition-colors">
-                Каталог
-              </a>
-              <a href="#delivery" className="text-sm font-medium hover:text-primary transition-colors">
-                Доставка
-              </a>
-              <a href="#about" className="text-sm font-medium hover:text-primary transition-colors">
-                О нас
-              </a>
-              <a href="#contacts" className="text-sm font-medium hover:text-primary transition-colors">
-                Контакты
-              </a>
-            </nav>
           </div>
+          <div className="hidden md:flex items-center gap-4">
+            <span>🎁 Бесплатная доставка от 3000 ₽</span>
+            <span>⚡ Скидки до 70%</span>
+          </div>
+        </div>
+      </div>
 
-          <div className="flex items-center gap-4">
-            <div className="hidden md:flex relative w-64">
-              <Input
-                type="search"
-                placeholder="Поиск товаров..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
-              <Icon name="Search" className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+      <header className="bg-white shadow-sm sticky top-0 z-50">
+        <div className="container py-4">
+          <div className="flex items-center justify-between gap-4">
+            <a href="/" className="flex items-center gap-3">
+              <div className="bg-gradient-to-br from-orange-500 to-red-500 text-white w-12 h-12 rounded-lg flex items-center justify-center font-bold text-xl">
+                М
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-gray-900">МойМир</div>
+                <div className="text-xs text-gray-500">Интернет-магазин</div>
+              </div>
+            </a>
+
+            <div className="hidden md:flex flex-1 max-w-2xl mx-8">
+              <div className="relative w-full">
+                <Input
+                  type="search"
+                  placeholder="Поиск товаров..."
+                  className="pl-10 h-12 text-base"
+                />
+                <Icon name="Search" className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+              </div>
             </div>
 
-            <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="icon" className="relative">
-                  <Icon name="ShoppingCart" className="h-5 w-5" />
-                  {getTotalItems() > 0 && (
-                    <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs">
-                      {getTotalItems()}
-                    </Badge>
-                  )}
-                </Button>
-              </SheetTrigger>
-              <SheetContent className="w-full sm:max-w-lg">
-                <SheetHeader>
-                  <SheetTitle>Корзина</SheetTitle>
-                </SheetHeader>
-                <div className="mt-8 flex flex-col gap-4">
-                  {cart.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-12 text-center">
-                      <Icon name="ShoppingCart" className="h-16 w-16 text-muted-foreground mb-4" />
-                      <p className="text-lg font-medium">Корзина пуста</p>
-                      <p className="text-sm text-muted-foreground">Добавьте товары из каталога</p>
-                    </div>
-                  ) : (
-                    <>
-                      <div className="flex-1 overflow-auto">
-                        {cart.map((item) => (
-                          <div key={item.id} className="flex gap-4 py-4 border-b">
-                            <img
-                              src={item.image}
-                              alt={item.name}
-                              className="w-20 h-20 object-cover rounded-lg"
-                            />
-                            <div className="flex-1">
-                              <h3 className="font-medium text-sm">{item.name}</h3>
-                              <p className="text-lg font-bold mt-1">{item.price.toLocaleString()} ₽</p>
-                              <div className="flex items-center gap-2 mt-2">
-                                <Button
-                                  variant="outline"
-                                  size="icon"
-                                  className="h-8 w-8"
-                                  onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                >
-                                  <Icon name="Minus" className="h-4 w-4" />
-                                </Button>
-                                <span className="w-8 text-center font-medium">{item.quantity}</span>
-                                <Button
-                                  variant="outline"
-                                  size="icon"
-                                  className="h-8 w-8"
-                                  onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                >
-                                  <Icon name="Plus" className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-8 w-8 ml-auto"
-                                  onClick={() => removeFromCart(item.id)}
-                                >
-                                  <Icon name="Trash2" className="h-4 w-4" />
-                                </Button>
+            <div className="flex items-center gap-3">
+              <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
+                <SheetTrigger asChild>
+                  <Button size="lg" className="relative bg-orange-500 hover:bg-orange-600">
+                    <Icon name="ShoppingCart" className="h-5 w-5 mr-2" />
+                    <span className="hidden sm:inline">Корзина</span>
+                    {getTotalItems() > 0 && (
+                      <Badge className="absolute -top-2 -right-2 bg-red-500 border-white">
+                        {getTotalItems()}
+                      </Badge>
+                    )}
+                  </Button>
+                </SheetTrigger>
+                <SheetContent className="w-full sm:max-w-lg">
+                  <SheetHeader>
+                    <SheetTitle className="text-2xl">Ваша корзина</SheetTitle>
+                  </SheetHeader>
+                  <div className="mt-8 flex flex-col gap-4">
+                    {cart.length === 0 ? (
+                      <div className="flex flex-col items-center justify-center py-16 text-center">
+                        <Icon name="ShoppingCart" className="h-20 w-20 text-gray-300 mb-4" />
+                        <p className="text-xl font-semibold text-gray-700">Корзина пуста</p>
+                        <p className="text-gray-500 mt-2">Добавьте товары из каталога</p>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="flex-1 overflow-auto space-y-4">
+                          {cart.map((item) => (
+                            <div key={item.id} className="flex gap-4 p-4 bg-gray-50 rounded-lg">
+                              <img
+                                src={item.image}
+                                alt={item.name}
+                                className="w-24 h-24 object-cover rounded-lg"
+                              />
+                              <div className="flex-1">
+                                <h3 className="font-semibold text-sm mb-2">{item.name}</h3>
+                                <div className="flex items-baseline gap-2 mb-3">
+                                  <span className="text-xl font-bold text-orange-600">{item.price.toLocaleString()} ₽</span>
+                                  {item.oldPrice && (
+                                    <span className="text-sm text-gray-400 line-through">
+                                      {item.oldPrice.toLocaleString()} ₽
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Button
+                                    variant="outline"
+                                    size="icon"
+                                    className="h-8 w-8"
+                                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                  >
+                                    <Icon name="Minus" className="h-4 w-4" />
+                                  </Button>
+                                  <span className="w-10 text-center font-semibold">{item.quantity}</span>
+                                  <Button
+                                    variant="outline"
+                                    size="icon"
+                                    className="h-8 w-8"
+                                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                  >
+                                    <Icon name="Plus" className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8 ml-auto text-red-500 hover:text-red-700 hover:bg-red-50"
+                                    onClick={() => removeFromCart(item.id)}
+                                  >
+                                    <Icon name="Trash2" className="h-4 w-4" />
+                                  </Button>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="border-t pt-4 space-y-4">
-                        <div className="flex justify-between text-lg font-bold">
-                          <span>Итого:</span>
-                          <span>{getTotalPrice().toLocaleString()} ₽</span>
+                          ))}
                         </div>
-                        <Button className="w-full" size="lg">
-                          Оформить заказ
-                        </Button>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </SheetContent>
-            </Sheet>
+                        <div className="border-t pt-4 space-y-4">
+                          <div className="flex justify-between items-center text-2xl font-bold">
+                            <span>Итого:</span>
+                            <span className="text-orange-600">{getTotalPrice().toLocaleString()} ₽</span>
+                          </div>
+                          <Button size="lg" className="w-full text-lg bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600">
+                            Оформить заказ
+                          </Button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
         </div>
       </header>
 
-      <section className="bg-gradient-to-br from-primary/10 to-primary/5 py-20">
+      <div className="bg-gradient-to-r from-orange-400 via-red-400 to-pink-400 py-16">
         <div className="container">
-          <div className="max-w-2xl">
-            <h1 className="text-5xl font-bold mb-4">
-              Всё для уютного дома
+          <div className="max-w-3xl text-white">
+            <h1 className="text-5xl md:text-6xl font-extrabold mb-4 drop-shadow-lg">
+              Товары для дома со скидкой до 70%!
             </h1>
-            <p className="text-xl text-muted-foreground mb-8">
-              Качественная мебель, текстиль и предметы интерьера. Создайте дом своей мечты вместе с МойМир.
+            <p className="text-xl md:text-2xl mb-8 drop-shadow">
+              Качественные товары для кухни, дома и здоровья. Доставка по всей России!
             </p>
-            <Button size="lg" className="text-lg px-8">
-              Смотреть каталог
-              <Icon name="ArrowRight" className="ml-2 h-5 w-5" />
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      <section id="catalog" className="py-12">
-        <div className="container">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold">Каталог товаров</h2>
-          </div>
-
-          <div className="flex gap-2 mb-8 overflow-x-auto pb-2">
-            {categories.map((category) => (
-              <Button
-                key={category}
-                variant={selectedCategory === category ? 'default' : 'outline'}
-                onClick={() => setSelectedCategory(category)}
-                className="whitespace-nowrap"
-              >
-                {category}
+            <div className="flex flex-wrap gap-4">
+              <Button size="lg" className="bg-white text-orange-600 hover:bg-gray-100 text-lg px-8 py-6 h-auto font-bold shadow-xl">
+                Смотреть каталог
+                <Icon name="ChevronRight" className="ml-2 h-6 w-6" />
               </Button>
-            ))}
-          </div>
-
-          <div className="md:hidden mb-6">
-            <div className="relative">
-              <Input
-                type="search"
-                placeholder="Поиск товаров..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
-              <Icon name="Search" className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Button size="lg" variant="outline" className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-orange-600 text-lg px-8 py-6 h-auto font-bold">
+                <Icon name="Phone" className="mr-2 h-5 w-5" />
+                Позвонить
+              </Button>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
+      <section className="py-12 bg-white">
+        <div className="container">
+          <h2 className="text-4xl font-extrabold text-center mb-2">
+            🔥 Хиты продаж
+          </h2>
+          <p className="text-center text-gray-600 text-lg mb-10">Самые популярные товары этого месяца</p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {products.map((product) => (
               <div
                 key={product.id}
-                className="group border rounded-xl overflow-hidden hover:shadow-lg transition-shadow bg-card"
+                className="group bg-white border-2 border-gray-200 rounded-2xl overflow-hidden hover:shadow-2xl hover:border-orange-300 transition-all duration-300"
               >
-                <div className="relative aspect-square overflow-hidden">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
+                <div className="relative aspect-square overflow-hidden bg-gray-100">
                   {product.badge && (
-                    <Badge className="absolute top-3 left-3">
+                    <Badge className="absolute top-3 left-3 bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold text-sm px-3 py-1 shadow-lg z-10">
                       {product.badge}
                     </Badge>
                   )}
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
                 </div>
-                <div className="p-4">
-                  <h3 className="font-semibold text-lg mb-2 line-clamp-2">{product.name}</h3>
-                  <div className="flex items-baseline gap-2 mb-4">
-                    <span className="text-2xl font-bold">{product.price.toLocaleString()} ₽</span>
+                <div className="p-5">
+                  <h3 className="font-bold text-base mb-3 line-clamp-2 min-h-[3rem]">
+                    {product.name}
+                  </h3>
+                  
+                  {product.rating && (
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="flex items-center gap-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Icon
+                            key={i}
+                            name="Star"
+                            className={`h-4 w-4 ${
+                              i < Math.floor(product.rating!)
+                                ? 'fill-yellow-400 text-yellow-400'
+                                : 'text-gray-300'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <span className="text-sm text-gray-500">({product.reviews})</span>
+                    </div>
+                  )}
+
+                  <div className="mb-4">
                     {product.oldPrice && (
-                      <span className="text-sm text-muted-foreground line-through">
+                      <div className="text-sm text-gray-400 line-through mb-1">
                         {product.oldPrice.toLocaleString()} ₽
-                      </span>
+                      </div>
+                    )}
+                    <div className="text-3xl font-extrabold text-orange-600">
+                      {product.price.toLocaleString()} ₽
+                    </div>
+                    {product.oldPrice && (
+                      <div className="text-sm font-semibold text-green-600 mt-1">
+                        Экономия {(product.oldPrice - product.price).toLocaleString()} ₽
+                      </div>
                     )}
                   </div>
+                  
                   <Button
-                    className="w-full"
+                    className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-6 text-base shadow-lg"
                     onClick={() => addToCart(product)}
                   >
-                    <Icon name="ShoppingCart" className="mr-2 h-4 w-4" />
-                    В корзину
+                    <Icon name="ShoppingCart" className="mr-2 h-5 w-5" />
+                    Купить
                   </Button>
                 </div>
               </div>
             ))}
           </div>
-
-          {filteredProducts.length === 0 && (
-            <div className="text-center py-12">
-              <Icon name="Package" className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-              <p className="text-lg font-medium">Товары не найдены</p>
-              <p className="text-sm text-muted-foreground">Попробуйте изменить фильтры или поисковый запрос</p>
-            </div>
-          )}
         </div>
       </section>
 
-      <section className="bg-muted/50 py-16">
+      <section className="py-12 bg-gradient-to-br from-orange-50 to-red-50">
         <div className="container">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
-                <Icon name="Truck" className="h-8 w-8 text-primary" />
+          <h2 className="text-4xl font-extrabold text-center mb-10">Почему выбирают нас?</h2>
+          
+          <div className="grid md:grid-cols-4 gap-6">
+            <div className="bg-white p-6 rounded-xl shadow-lg text-center hover:shadow-2xl transition-shadow">
+              <div className="w-20 h-20 bg-gradient-to-br from-orange-400 to-red-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Icon name="Truck" className="h-10 w-10 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Быстрая доставка</h3>
-              <p className="text-muted-foreground">
-                Доставим ваш заказ в течение 1-3 дней по всей России
-              </p>
+              <h3 className="text-xl font-bold mb-2">Быстрая доставка</h3>
+              <p className="text-gray-600">Доставим за 1-3 дня по всей России</p>
             </div>
-            <div className="text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
-                <Icon name="Shield" className="h-8 w-8 text-primary" />
+
+            <div className="bg-white p-6 rounded-xl shadow-lg text-center hover:shadow-2xl transition-shadow">
+              <div className="w-20 h-20 bg-gradient-to-br from-orange-400 to-red-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Icon name="ShieldCheck" className="h-10 w-10 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Гарантия качества</h3>
-              <p className="text-muted-foreground">
-                Все товары сертифицированы и имеют гарантию
-              </p>
+              <h3 className="text-xl font-bold mb-2">100% гарантия</h3>
+              <p className="text-gray-600">Вернём деньги, если не понравится</p>
             </div>
-            <div className="text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
-                <Icon name="Percent" className="h-8 w-8 text-primary" />
+
+            <div className="bg-white p-6 rounded-xl shadow-lg text-center hover:shadow-2xl transition-shadow">
+              <div className="w-20 h-20 bg-gradient-to-br from-orange-400 to-red-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Icon name="BadgePercent" className="h-10 w-10 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Выгодные цены</h3>
-              <p className="text-muted-foreground">
-                Регулярные акции и скидки для наших клиентов
-              </p>
+              <h3 className="text-xl font-bold mb-2">Акции и скидки</h3>
+              <p className="text-gray-600">Скидки до 70% на хиты продаж</p>
+            </div>
+
+            <div className="bg-white p-6 rounded-xl shadow-lg text-center hover:shadow-2xl transition-shadow">
+              <div className="w-20 h-20 bg-gradient-to-br from-orange-400 to-red-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Icon name="Headphones" className="h-10 w-10 text-white" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Поддержка 24/7</h3>
+              <p className="text-gray-600">Ответим на любые вопросы</p>
             </div>
           </div>
         </div>
       </section>
 
-      <footer className="bg-card border-t py-12">
+      <footer className="bg-gray-900 text-white py-12">
         <div className="container">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Icon name="Home" className="h-6 w-6 text-primary" />
+              <div className="flex items-center gap-3 mb-4">
+                <div className="bg-gradient-to-br from-orange-500 to-red-500 w-10 h-10 rounded-lg flex items-center justify-center font-bold">
+                  М
+                </div>
                 <span className="text-xl font-bold">МойМир</span>
               </div>
-              <p className="text-sm text-muted-foreground">
-                Интернет-магазин товаров для дома и интерьера
+              <p className="text-gray-400 text-sm">
+                Интернет-магазин качественных товаров для дома, кухни и здоровья
               </p>
             </div>
+
             <div>
-              <h4 className="font-semibold mb-4">Покупателям</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-primary transition-colors">Как сделать заказ</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Способы оплаты</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Доставка</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Возврат товара</a></li>
+              <h4 className="font-bold mb-4 text-lg">Покупателям</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><a href="#" className="hover:text-orange-400 transition-colors">Как оформить заказ</a></li>
+                <li><a href="#" className="hover:text-orange-400 transition-colors">Оплата и доставка</a></li>
+                <li><a href="#" className="hover:text-orange-400 transition-colors">Возврат товара</a></li>
+                <li><a href="#" className="hover:text-orange-400 transition-colors">Гарантия</a></li>
               </ul>
             </div>
+
             <div>
-              <h4 className="font-semibold mb-4">Компания</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-primary transition-colors">О нас</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Контакты</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Вакансии</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Партнёрам</a></li>
+              <h4 className="font-bold mb-4 text-lg">Компания</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><a href="#" className="hover:text-orange-400 transition-colors">О нас</a></li>
+                <li><a href="#" className="hover:text-orange-400 transition-colors">Контакты</a></li>
+                <li><a href="#" className="hover:text-orange-400 transition-colors">Отзывы</a></li>
+                <li><a href="#" className="hover:text-orange-400 transition-colors">Вакансии</a></li>
               </ul>
             </div>
+
             <div>
-              <h4 className="font-semibold mb-4">Контакты</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
+              <h4 className="font-bold mb-4 text-lg">Контакты</h4>
+              <ul className="space-y-3 text-sm text-gray-400">
                 <li className="flex items-center gap-2">
-                  <Icon name="Phone" className="h-4 w-4" />
-                  <a href="tel:+78001234567" className="hover:text-primary transition-colors">
+                  <Icon name="Phone" className="h-4 w-4 text-orange-400" />
+                  <a href="tel:88001234567" className="hover:text-orange-400 transition-colors font-semibold">
                     8 800 123-45-67
                   </a>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Icon name="Mail" className="h-4 w-4" />
-                  <a href="mailto:info@moymir.ru" className="hover:text-primary transition-colors">
+                  <Icon name="Mail" className="h-4 w-4 text-orange-400" />
+                  <a href="mailto:info@moymir.ru" className="hover:text-orange-400 transition-colors">
                     info@moymir.ru
                   </a>
                 </li>
-                <li className="flex items-center gap-2">
-                  <Icon name="MapPin" className="h-4 w-4" />
-                  <span>Москва, ул. Примерная, 1</span>
+                <li className="flex items-start gap-2">
+                  <Icon name="MapPin" className="h-4 w-4 text-orange-400 mt-1" />
+                  <span>Россия, Москва<br/>Ленинский проспект, 1</span>
                 </li>
               </ul>
             </div>
           </div>
-          <div className="border-t pt-8 text-center text-sm text-muted-foreground">
-            <p>© 2024 МойМир. Все права защищены.</p>
+
+          <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
+            <p>© 2024 МойМир. Интернет-магазин товаров для дома. Все права защищены.</p>
           </div>
         </div>
       </footer>
